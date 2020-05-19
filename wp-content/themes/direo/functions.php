@@ -346,7 +346,7 @@ function webhook_options_page() {?>
     <h2>Webhook management</h2>
     <div class="form-group">
         <input type="text" class="form-control" id="name">
-        <button class="primary">Add</button>
+        <button class="primary btn">Add</button>
     </div>
 <?php }
 add_action( 'admin_menu', 'register_webhook_api' );
