@@ -20,8 +20,14 @@ function get_webhook() {
     $webhook = new WEBHOOK();
     $webhook->paging();
 }
-function update_webhook() {}
-function delete_webhook() {}
+function delete_webhook() {
+    $webhook = new WEBHOOK();
+    $webhook->delete();
+}
+function update_webhook() {
+    $webhook = new WEBHOOK();
+    $webhook->update();
+}
 
 class WEBHOOK{
     private $status = 200;
@@ -58,10 +64,10 @@ class WEBHOOK{
 
     public function paging() {
         if(!$this->checkNonce()) return false;
-        $page   = isset($_REQUEST['page']) && !empty($_REQUEST['page']) ?  intval($_REQUEST['page']) : 1;
-        $size   = isset($_REQUEST['size']) && !empty($_REQUEST['size']) ?  intval($_REQUEST['size']) : 20;
+        $page    = isset($_REQUEST['page']) && !empty($_REQUEST['page']) ?  intval($_REQUEST['page']) : 1;
+        $size    = isset($_REQUEST['size']) && !empty($_REQUEST['size']) ?  intval($_REQUEST['size']) : 20;
         $orderBy = isset($_REQUEST['order-by']) && !empty($_REQUEST['order-by']) ?  $_REQUEST['order-by'] : "id";
-        $s = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ?  $_REQUEST['s'] : "";
+        $s       = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ?  trim($_REQUEST['s']) : "";
         if (!in_array($orderBy, ['id', 'webhook_url', 'api_key'])) {
             $orderBy = 'id';
         }
@@ -73,11 +79,53 @@ class WEBHOOK{
             $page = 1;
         }
         $offset = ($page - 1) * $size;
-        $where = ["post_type='" . $this->postType . "'"];
-        $where = implode(" AND ", $where);
-        $sql = "SELECT ID as id, post_title as webhook_url, post_excerpt as api_key FROM " . $this->model->posts . " WHERE $where ORDER BY $orderBy $sort LIMIT $size OFFSET $offset";
+        $where  = ["post_type='" . $this->postType . "'"];
+        if (!empty($s)) {
+            $where[] = "post_title like '%$s%'";
+        }
+        $where      = implode(" AND ", $where);
+        $sql        = "SELECT ID as id, post_title as webhook_url, post_excerpt as api_key FROM " . $this->model->posts . " WHERE $where ORDER BY $orderBy $sort LIMIT $size OFFSET $offset";
         $this->data = $this->model->get_results($sql, ARRAY_A);
+        // $listObject = $this->model->get_results($sql, ARRAY_A);
+        // $total      = $this->model->get_results("SELECT count(ID) as total FROM ". $this->model->posts . " WHERE $where", ARRAY_A);
+        // $this->data = [
+        //     "listObject" => $listObject,
+        //     "total" => $total[0]['total'],
+        // ];
     }
+
+    public function delete() {
+        $webhook = $this->getPostById($this->id);
+        if(!empty($webhook)) {
+            $isDeleted = wp_delete_post($this->id);
+            if (!$isDeleted) {
+                $this->status = 400;
+                $this->msg    = "Something went wrong";
+            }
+        } else {
+            $this->status = 404;
+            $this->msg    = "Object not found";
+        }
+    }
+
+    public function update() {
+        $webhook = $this->getPostById($this->id);
+        if(!empty($webhook)) {
+            $isUpdated = wp_update_post([
+                "ID"           => $this->id,
+                "post_title"   => $this->url,
+                "post_type"    => $this->postType,
+            ]);
+            if (!$isUpdated) {
+                $this->status = 400;
+                $this->msg = "Server error, please try later";
+            }
+        } else {
+            $this->status = 404;
+            $this->msg    = "Object not found";
+        }
+    }
+    
     private function checkNonce() {
         if (!wp_verify_nonce( $_REQUEST['nonce'], "webhook_nonce")) {
             $this->status = 400;
@@ -108,10 +156,10 @@ class WEBHOOK{
         return true;
     }
 
-    // private function getPostById() {
-    //     $sql = "Select * from " . $this->model->posts . " where post_type='" . $this->postType . "' AND ID = $this->id";
-    //     return $this->model->get_results($sql, ARRAY_A);
-    // }
+    private function getPostById() {
+        $sql = "Select * from " . $this->model->posts . " where post_type='" . $this->postType . "' AND ID = $this->id";
+        return $this->model->get_results($sql, ARRAY_A);
+    }
 
     private function checkPostExist() {
         $sql = "Select * from " . $this->model->posts . " where post_type='" . $this->postType . "' AND post_title='$this->url'";
