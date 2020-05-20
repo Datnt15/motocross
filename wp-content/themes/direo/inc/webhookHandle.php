@@ -14,21 +14,24 @@ add_action("wp_ajax_nopriv_delete_webhook", "delete_webhook");
 function add_webhook() {
     $webhook = new WEBHOOK();
     $webhook->addWebhook();
+    wp_die();
 }
 
 function get_webhook() {
     $webhook = new WEBHOOK();
     $webhook->paging();
+    wp_die();
 }
 function delete_webhook() {
     $webhook = new WEBHOOK();
     $webhook->delete();
+    wp_die();
 }
 function update_webhook() {
     $webhook = new WEBHOOK();
     $webhook->update();
+    wp_die();
 }
-
 class WEBHOOK{
     private $status = 200;
     private $msg = "OK";
@@ -86,12 +89,23 @@ class WEBHOOK{
         $where      = implode(" AND ", $where);
         $sql        = "SELECT ID as id, post_title as webhook_url, post_excerpt as api_key FROM " . $this->model->posts . " WHERE $where ORDER BY $orderBy $sort LIMIT $size OFFSET $offset";
         $this->data = $this->model->get_results($sql, ARRAY_A);
-        // $listObject = $this->model->get_results($sql, ARRAY_A);
-        // $total      = $this->model->get_results("SELECT count(ID) as total FROM ". $this->model->posts . " WHERE $where", ARRAY_A);
-        // $this->data = [
-        //     "listObject" => $listObject,
-        //     "total" => $total[0]['total'],
-        // ];
+    }
+
+    public function callback($id) {
+        $where = "post_type='" . $this->postType . "'";
+        $tbl   = $this->model->posts;
+        $sql   = "SELECT post_title as url FROM $tbl WHERE $where";
+        $urls  = $this->model->get_results($sql, ARRAY_A);
+        foreach ($urls as $url) {
+            $URL = $url['url'];
+            $query = wp_parse_url( $URL, PHP_URL_QUERY );
+            if ($query) {
+                $URL .= "&id=$id";
+            } else {
+                $URL .= "?id=$id";
+            }
+            file_get_contents($URL);
+        }
     }
 
     public function delete() {
@@ -175,6 +189,5 @@ class WEBHOOK{
             'msg'    => $this->msg,
             'data'   => $this->data,
         ]);
-        wp_die();
     }
 }

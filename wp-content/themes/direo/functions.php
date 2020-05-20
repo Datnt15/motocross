@@ -338,6 +338,8 @@ function image_opacity()
 
 add_action('wp_head', 'image_opacity');
 
+
+/**================================================ Add webhook management and filter when post udpate =============================================== */
 function register_webhook_api() {
    add_options_page('Webhook management', 'Webhook management', 'manage_options', 'webhook', 'webhook_options_page');
 }
@@ -345,3 +347,15 @@ function webhook_options_page() {
     require_once('inc/webhook.php');
 }
 add_action( 'admin_menu', 'register_webhook_api' );
+
+// Filter when post udpate
+add_action("save_post_at_biz_dir", "callback_to_webhook", 10, 3);
+function callback_to_webhook($post_ID, $post, $isUpdated) {
+    if ($isUpdated && $post->post_type == "at_biz_dir" && $post->post_status == "publish") {
+        // Proccess
+        $webhook = new WEBHOOK();
+        $webhook2 = $webhook;
+        $webhook = null;
+        $webhook2->callback($post_ID);
+    }
+}
