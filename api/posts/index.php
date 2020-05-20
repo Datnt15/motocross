@@ -8,6 +8,15 @@ $app = new \Slim\App();
 $app->get('/', function (Request $request, Response $response, $args) {
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
     $size = isset($_GET['size']) ? intval($_GET['size']) : 10;
+    $key  = isset($_GET['key']) ? $_GET['key'] : "";
+    if (!isApiKeyExist($key)) {
+        $res = [
+            "status" => 403,
+            "msg" => "You are not allowed to access this api",
+        ];
+        $response->getBody()->write(encode($res));
+        return $response;
+    }
     $fields = [
         'ID',
         'post_title',
@@ -32,6 +41,15 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 $app->get('/{id}', function (Request $request, Response $response, $args) {
+    $key = isset($_GET['key']) ? $_GET['key'] : "";
+    if (!isApiKeyExist($key)) {
+        $res = [
+            "status" => 403,
+            "msg" => "You are not allowed to access this api",
+        ];
+        $response->getBody()->write(encode($res));
+        return $response;
+    }
     $id = $args['id'];
     $data = fetchQuery("select * from `wp_posts` WHERE ID=$id AND post_status='publish' AND post_type='at_biz_dir'");
     $postMeta = fetchQuery("SELECT * from wp_postmeta WHERE post_id=$id", 1, 10000);
@@ -109,6 +127,11 @@ $app->get('/{id}', function (Request $request, Response $response, $args) {
     return $response;
 });
 $app->run();
+
+function isApiKeyExist($key) {
+    $webhook = fetchQuery("select ID from wp_posts where post_type='webhook_url' AND post_excerpt='$key'");
+    return !!count($webhook);
+}
 
 function encode($data) {
     return json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
