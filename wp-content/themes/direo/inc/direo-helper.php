@@ -101,7 +101,6 @@ if (!function_exists('direo_pagination')) {
         ));
 
         echo sprintf('<div class="m-top-50"><nav class="navigation pagination d-flex justify-content-center" role="navigation"><div class="nav-links">%s</div></nav></div>', wp_kses_post($links));
-
     }
 }
 
@@ -157,7 +156,7 @@ if (!function_exists('direo_blog_meta_info')) {
             } ?>
 
         </ul>
-        <?php
+    <?php
     }
 }
 
@@ -239,8 +238,7 @@ if (!function_exists('direo_social_sharing_buttons')) {
 if (!function_exists('direo_sharing')) {
     function direo_sharing()
     { ?>
-        <span class="dropdown-toggle" id="social-links" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false" role="menu">
+        <span class="dropdown-toggle" id="social-links" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
             <span class="la la-share"></span>
             <?PHP esc_html_e('Share', 'direo'); ?>
         </span>
@@ -267,7 +265,7 @@ if (!function_exists('direo_sharing')) {
             </ul>
             <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
         </div>
-        <?php
+    <?php
     }
 }
 
@@ -461,7 +459,7 @@ if (!function_exists('direo_tiny_cart')) {
                                 ), $cart_item_key); ?>
 
                             </div>
-                            <?php
+                    <?php
                         }
                     }
                     wp_reset_postdata(); ?>
@@ -479,11 +477,11 @@ if (!function_exists('direo_tiny_cart')) {
                             <b><?php esc_html_e('No products in the cart.', 'direo') ?></b>
                         </p>
                     </div>
-                    <?php
+                <?php
                 } ?>
             </div>
         </div>
-        <?php
+    <?php
         return ob_get_clean();
     }
 }
@@ -519,14 +517,14 @@ if (!function_exists('direo_time_link')) {
     function direo_time_link()
     {
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-        $time_string = sprintf($time_string,
+        $time_string = sprintf(
+            $time_string,
             get_the_date(DATE_W3C),
             get_the_date(),
             get_the_modified_date(DATE_W3C),
             get_the_modified_date()
         );
         return sprintf('<a href="%s" rel="bookmark">%s</a>', esc_url(get_permalink()), $time_string);
-
     }
 };
 
@@ -565,7 +563,6 @@ if (!function_exists('direo_get_image_alt')) {
             endif;
 
         endif;
-
     }
 }
 
@@ -615,10 +612,9 @@ if (!function_exists('direo_recovery_password')) {
 
 
             $update_user = wp_update_user(array(
-                    'ID' => $user->ID,
-                    'user_pass' => $random_password
-                )
-            );
+                'ID' => $user->ID,
+                'user_pass' => $random_password
+            ));
 
             // if  update user return true then lets send user an email containing the new password
             if ($update_user) {
@@ -633,11 +629,9 @@ if (!function_exists('direo_recovery_password')) {
                 } else {
                     $error = esc_html__('Password updated! But something went wrong sending email.', 'direo');
                 }
-
             } else {
                 $error = esc_html__('Oops something went wrong updaing your account.', 'direo');
             }
-
         }
 
 
@@ -780,13 +774,10 @@ function direo_menu_area()
                                     <div class="menu-container order-lg-1 order-sm-0">
                                         <div class="d_menu">
                                             <nav class="navbar navbar-expand-lg mainmenu__menu">
-                                                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                                        data-target="#direo-navbar-collapse"
-                                                        aria-controls="direo-navbar-collapse" aria-expanded="false"
-                                                        aria-label="Toggle navigation">
-                                                        <span class="navbar-toggler-icon icon-menu">
-                                                            <i class="la la-reorder"></i>
-                                                        </span>
+                                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#direo-navbar-collapse" aria-controls="direo-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                                                    <span class="navbar-toggler-icon icon-menu">
+                                                        <i class="la la-reorder"></i>
+                                                    </span>
                                                 </button>
                                                 <div class="collapse navbar-collapse" id="direo-navbar-collapse">
                                                     <?php
@@ -812,13 +803,12 @@ function direo_menu_area()
                                                         <?php
                                                         if (!direo_woo_shopping_cart() && $add_listing_btn) { ?>
                                                             <li>
-                                                                <a href="<?php echo !empty($add_btn_url) ? esc_url($add_btn_url) : esc_url(ATBDP_Permalink::get_add_listing_page_link()); ?>"
-                                                                   class="btn btn-xs btn-gradient btn-gradient-two">
+                                                                <a href="<?php echo !empty($add_btn_url) ? esc_url($add_btn_url) : esc_url(ATBDP_Permalink::get_add_listing_page_link()); ?>" class="btn btn-xs btn-gradient btn-gradient-two">
                                                                     <span class="la la-plus"></span>
                                                                     <?php esc_attr_e($add_listing_btn, 'direo'); ?>
                                                                 </a>
                                                             </li>
-                                                            <?php
+                                                        <?php
                                                         }
                                                         if (!is_user_logged_in() && $quick_log_reg) { ?>
                                                             <li>
@@ -836,12 +826,12 @@ function direo_menu_area()
                                                                     echo sprintf('<a href="#" class="access-link" data-toggle="modal" data-target="#signup_modal">%s</a>', esc_attr($register));
                                                                 } ?>
                                                             </li>
-                                                            <?php
+                                                        <?php
                                                         } ?>
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <?php
+                                        <?php
                                         }
 
                                         if (class_exists('woocommerce')) {
@@ -856,13 +846,13 @@ function direo_menu_area()
                                                     <a href="#" class="offcanvas-menu__user" class="rounded-circle">
                                                         <?php echo wp_kses_post($avatar_img); ?>
                                                     </a>
-                                                    <?php
+                                                <?php
                                                 } else { ?>
                                                     <a href="#" class="offcanvas-menu__user">
                                                         <?php
                                                         echo sprintf('<img src="%s" alt="%s" class="rounded-circle"/>', esc_url($author_img[0]), direo_get_image_alt($author_id)); ?>
                                                     </a>
-                                                    <?php
+                                                <?php
                                                 } ?>
 
                                                 <div class="offcanvas-menu__contents">
@@ -895,7 +885,7 @@ function direo_menu_area()
                                                                     <?php esc_html_e('Favorite Listing', 'direo'); ?>
                                                                 </a>
                                                             </li>
-                                                            <?php
+                                                        <?php
                                                         } ?>
                                                         <li>
                                                             <a href="<?php echo esc_url(ATBDP_Permalink::get_add_listing_page_link()); ?>">
@@ -916,12 +906,11 @@ function direo_menu_area()
                                         if (class_exists('Directorist_Base')) {
                                             if (!is_user_logged_in() && $quick_log_reg) { ?>
                                                 <div class="mobile-login">
-                                                    <a href="#" class="access-link" data-toggle="modal"
-                                                       data-target="#login_modal">
+                                                    <a href="#" class="access-link" data-toggle="modal" data-target="#login_modal">
                                                         <span class="la la-user"></span>
                                                     </a>
                                                 </div>
-                                                <?php
+                                            <?php
                                             }
                                             if ($add_listing_btn) { ?>
                                                 <div class="mobile-add-listing">
@@ -929,7 +918,7 @@ function direo_menu_area()
                                                         <span class="la la-plus"></span>
                                                     </a>
                                                 </div>
-                                                <?php
+                                        <?php
                                             }
                                         } ?>
                                     </div>
@@ -940,7 +929,7 @@ function direo_menu_area()
                 </div>
             </div>
         </div>
-        <?php
+    <?php
     } else { ?>
         <div class="menu-area menu1 menu--<?php echo ('menu3' == direo_menu_style()) ? esc_html('light bg-dark') : esc_html('dark'); ?>">
             <div class="top-menu-area">
@@ -955,19 +944,16 @@ function direo_menu_area()
                                         <span class="bar"></span>
                                         <span class="bar"></span>
                                     </a>
-                                    <?php
+                                <?php
                                 }
                                 direo_site_identity(); ?>
                                 <div class="menu-container order-lg-1 order-sm-0">
                                     <div class="d_menu">
                                         <nav class="navbar navbar-expand-lg mainmenu__menu">
-                                            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                                    data-target="#direo-navbar-collapse"
-                                                    aria-controls="direo-navbar-collapse" aria-expanded="false"
-                                                    aria-label="Toggle navigation">
-                                            <span class="navbar-toggler-icon icon-menu">
-                                                <i class="la la-reorder"></i>
-                                            </span>
+                                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#direo-navbar-collapse" aria-controls="direo-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                                                <span class="navbar-toggler-icon icon-menu">
+                                                    <i class="la la-reorder"></i>
+                                                </span>
                                             </button>
                                             <div class="collapse navbar-collapse" id="direo-navbar-collapse">
                                                 <?php
@@ -992,8 +978,7 @@ function direo_menu_area()
                                                 <?php
                                                 if (!direo_woo_shopping_cart() && class_exists('Directorist_Base') && $add_listing_btn) { ?>
                                                     <li class="nav_addlisting_btn">
-                                                        <a href="<?php echo !empty($add_btn_url) ? esc_url($add_btn_url) : esc_url(ATBDP_Permalink::get_add_listing_page_link()); ?>"
-                                                           class="btn btn-xs btn-gradient btn-gradient-two">
+                                                        <a href="<?php echo !empty($add_btn_url) ? esc_url($add_btn_url) : esc_url(ATBDP_Permalink::get_add_listing_page_link()); ?>" class="btn btn-xs btn-gradient btn-gradient-two">
                                                             <span class="la la-plus"></span>
                                                             <?php esc_attr_e($add_listing_btn, 'direo'); ?>
                                                         </a>
@@ -1015,7 +1000,7 @@ function direo_menu_area()
                                                                     <a href="#" class="offcanvas-menu__user">
                                                                         <?php echo sprintf('<img src="%s" alt="%s" class="rounded-circle"/>', esc_url($author_img[0]), direo_get_image_alt($author_id)); ?>
                                                                     </a>
-                                                                    <?php
+                                                                <?php
                                                                 } ?>
 
                                                                 <ul class="list-unstyled">
@@ -1035,7 +1020,7 @@ function direo_menu_area()
                                                                                 <?php esc_html_e('Favorite Listing', 'direo'); ?>
                                                                             </a>
                                                                         </li>
-                                                                        <?php
+                                                                    <?php
                                                                     } ?>
                                                                     <li>
                                                                         <a href="<?php echo esc_url(ATBDP_Permalink::get_add_listing_page_link()); ?>">
@@ -1068,7 +1053,7 @@ function direo_menu_area()
                                                                     echo sprintf('<a href="#" class="access-link" data-toggle="modal" data-target="#signup_modal">%s</a>', esc_attr($register));
                                                                 } ?>
                                                             </li>
-                                                            <?php
+                                                <?php
                                                         }
                                                     }
                                                 } ?>
@@ -1079,12 +1064,11 @@ function direo_menu_area()
                                     if (class_exists('Directorist_Base')) {
                                         if (!is_user_logged_in() && $quick_log_reg) { ?>
                                             <div class="mobile-login">
-                                                <a href="#" class="access-link" data-toggle="modal"
-                                                   data-target="#login_modal">
+                                                <a href="#" class="access-link" data-toggle="modal" data-target="#login_modal">
                                                     <span class="la la-user"></span>
                                                 </a>
                                             </div>
-                                            <?php
+                                        <?php
                                         }
                                         if ($add_listing_btn) { ?>
                                             <div class="mobile-add-listing">
@@ -1092,7 +1076,7 @@ function direo_menu_area()
                                                     <span class="la la-plus"></span>
                                                 </a>
                                             </div>
-                                            <?php
+                                    <?php
                                         }
                                     } ?>
                                 </div>
@@ -1102,7 +1086,7 @@ function direo_menu_area()
                 </div>
             </div>
         </div>
-        <?php
+    <?php
     }
 }
 
@@ -1206,4 +1190,104 @@ function direo_page_pagination()
         'after' => '</div></nav></div>',
         'pagelink' => '<span class="page-numbers">%</span>',
     ));
+}
+
+/** 
+ * Add ajax to get search form and its result
+ * 
+ */
+add_action('wp_ajax_get_header_search_form', 'get_header_search_form');
+add_action('wp_ajax_nopriv_get_header_search_form', 'get_header_search_form');
+
+function get_header_search_form()
+{
+    ob_start(); ?>
+    <div class="directory_content_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                    <?php echo do_shortcode('[directorist_search_listing]'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+    $output = ob_get_contents();
+    ob_end_clean();
+    wp_send_json([
+        'status' => 200,
+        'html' => $output
+    ], 200);
+    wp_die();
+}
+add_action('wp_ajax_get_header_search_form_result', 'get_header_search_form_result');
+add_action('wp_ajax_nopriv_get_header_search_form_result', 'get_header_search_form_result');
+
+function get_header_search_form_result()
+{
+    $header = $sidebar = $filter = $layout = $number_cat = $row = $cat = $tag = $location = $featured = $popular = $order_by = $order_list = $map_height = $preview = '';
+    $atts = $wrap_class = [];
+    set_query_var( 'page', isset($_POST['page']) ? $_POST['page'] : 1);
+    set_query_var('miles'            , $_POST['miles']);
+    set_query_var('view'             , $_POST['view']);
+    set_query_var('cityLat'          , $_POST['cityLat']);
+    set_query_var('cityLng'          , $_POST['cityLng']);
+    set_query_var('address'          , $_POST['address']);
+    set_query_var('search_by_rating' , $_POST['search_by_rating']);
+    set_query_var('in_cat'           , $_POST['in_cat']);
+    set_query_var('price_range'      , isset($_POST['price_range']) ? $_POST['price_range'] : "");
+    set_query_var('price[0]'         , $_POST['price'][0]);
+    set_query_var('price[1]'         , $_POST['price'][1]);
+    set_query_var('price'            , (array) $_POST['price']);
+    set_query_var('sort'             , $_POST['sort']);
+    $_GET['miles']                = $_POST['miles'];
+    $_GET['view']                 = $_POST['view'];
+    $_GET['cityLat']              = $_POST['cityLat'];
+    $_GET['cityLng']              = $_POST['cityLng'];
+    $_GET['address']              = $_POST['address'];
+    $_GET['search_by_rating']     = $_POST['search_by_rating'];
+    $_GET['in_cat']               = $_POST['in_cat'];
+    $_GET['price_range']          = isset($_POST['price_range']) ? $_POST['price_range'] : "";
+    $_GET['search_radius_select'] = $_POST['search_radius_select'];
+    $_GET['price[0]']             = $_POST['price'][0];
+    $_GET['price[1]']             = $_POST['price'][1];
+    $_GET['price']                = $_POST['price'];
+    $_GET['sort']                 = $_POST['sort'];
+    extract($atts);
+    $filter = 'yes';
+    $wrap_class = apply_filters('kc-el-class', $atts);
+    unset($wrap_class[0]);
+    $image       = $preview ? 'yes' : 'no';
+    // $order       = !empty($_POST['sort']) ? explode("-", $_POST['sort']) : ['', ''];
+    // $order_by    = $order[0];
+    // $$order_list = $order[1];
+    $header = 'yes';
+    ob_start(); ?>
+    <div class="<?php echo implode(' ', $wrap_class); ?>" id='<?php echo esc_attr("listing-" . $layout); ?> checked-listings-general-view'>
+        <?php echo do_shortcode('[directorist_search_result view="' .
+            esc_attr($layout) . '" orderby="' .
+            esc_attr($order_by) . '" order="' .
+            esc_attr($order_list) . '" listings_per_page="' .
+            esc_attr($number_cat) . '" category="' .
+            esc_attr($cat) . '" tag="' .
+            esc_attr($tag) . '" location="' .
+            esc_attr($location) . '" featured_only="' .
+            esc_attr($featured) . '" popular_only="' .
+            esc_attr($popular) . '" header="' .
+            esc_attr($header) . '" columns="' .
+            esc_attr($row) . '" action_before_after_loop="' .
+            esc_attr($sidebar) . '" show_pagination="yes" advanced_filter="' .
+            esc_attr($filter) . '" map_height="' . $map_height . '" display_preview_image="' .
+            esc_attr($image) .
+            '"]');
+        ?>
+    </div>
+<?php
+    $output = ob_get_contents();
+    ob_end_clean();
+    wp_send_json([
+        'status' => 200,
+        'html'   => $output
+    ], 200);
+    wp_die();
 }

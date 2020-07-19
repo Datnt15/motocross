@@ -1,5 +1,6 @@
 <?php
-
+//Set Access-Control-Allow-Origin with PHP
+header('Access-Control-Allow-Origin: *', false);
 set_time_limit(120);
 
 require_once('inc/customizer.php');
